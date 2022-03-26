@@ -19,11 +19,13 @@ router.post('/', (req, res) => {
     
 });
 
-router.get('/:_id', (req, res) => {
-    Chats.find({})
-        .then(chats => res.send(chats))
-        .catch(error => console.log(error));
+router.get('/:user', (req, res) => {
+  Chats.find({})
+    .then(chats => res.send(chats))
+    .catch(error => console.log(error));
 });
+
+
 
 router.put('/:_id', (req, res) => {
     Chats.findOneAndUpdate({"_id": req.params}, {$set: req.body.data})

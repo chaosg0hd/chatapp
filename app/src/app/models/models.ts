@@ -24,17 +24,17 @@ export interface Contact_List {
 
 export interface Chats {
 
-  user_send: string,
+  _id: string
+  users: string[],
   chat_log: Chat_Log,
-  user_rec: string,
 
 }
 
 export interface Chat_Log {
 
-  chat_content: string
+  chat_user: string
   chat_date: Date
-  chat_direction: string
+  chat_content: string
 
 }
 

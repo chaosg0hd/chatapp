@@ -51,9 +51,19 @@ export class DataService {
     return this.get(uri);
   }
 
+  getChat(uri: any, user: any) {
+    return this.get(`${uri}/${user}`);
+  }
+
+  //Name is Temporary
+
   createItem(uri: any, data: any) {
     return this.post(uri, { data });
   }
+
+  //updateChat(uri: any, _id: any) {
+  //  return this.get(`${uri}/${_id}`);
+  //}
 
   //createItemss = async (uri: any, data: any) => {
   //  const response: any = await this.post(uri, { data }).toPromise();
@@ -68,9 +78,9 @@ export class DataService {
   //  return this.get(`${uri}/${id}`);
   //}
 
-  //updateItem(uri: any, id: any, data: any) {
-  //  return this.put(`${uri}/${id}`, { data })
-  //}
+  updateItem(uri: any, id: any, data: any) {
+    return this.put(`${uri}/${id}`, { data })
+  }
 
   //archiveItem(uri: any, id: any, data: any) {
   //  return this.patch(`${uri}/${id}`, { data });

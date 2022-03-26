@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
 const ChatsSchema = new mongoose.Schema({
-    user_send: String,
+    users: Array,
     chat_log: Object,
-    user_rec: String,
 });
 
 ChatsSchema.pre('save', function (next) {

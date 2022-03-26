@@ -22,9 +22,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.loadOnLoop();
-
-    this.getChats();
+    this.loadOnLoop();   
      
 
   }
@@ -33,6 +31,8 @@ export class HomeComponent implements OnInit {
 
     //Event Loop Starts Here
     this.checkIfMobile();
+
+    this.getChats(this.username);
 
 
     await this.delay(1000);
@@ -63,21 +63,111 @@ export class HomeComponent implements OnInit {
   id = localStorage.getItem("id")
   contact_list: any[] = JSON.parse(localStorage.getItem('contact_list') || '{}')
 
-  chatsPayload: any;
+  chatsPayload: Chats[] = [];
   chatsData: Chats[] = [];
+  chatsDataTemp: Chats[] = [];
 
   //Load Chats Data
 
-  getChats() {
-
-    //this.employeesDataSource.data = this.employeesData;
-
-    this.dataService.getAllItem('chats')
-      .subscribe((data: any) => {
-        console.log(data);
+  getChats(user: any) {
+    this.dataService.getChat('chats', user)
+      .subscribe((data: any) => {               
         this.chatsPayload = data;
-        this.chatsData = this.chatsPayload;
-      });
+
+        //This is poorly optimized
+
+        this.chatsDataTemp = []
+        for (let chats of this.chatsPayload) {
+          for (let chat_user of chats.users) {   
+            if (chat_user == this.username) {               
+              this.chatsDataTemp.push(chats)    
+            }                               
+          }         
+        }
+        if (this.chatsData.length == 0) {
+          this.chatsData = this.chatsDataTemp
+        }
+
+        //Poor JSON Checking
+
+        if (JSON.stringify(this.chatsDataTemp) != JSON.stringify(this.chatsData)) {
+          this.chatsData = this.chatsDataTemp
+          this.reloadActiveMessage()
+        }
+      });    
+  }
+
+  //Gets Last Messsage
+
+  getChatsContentsLast(chat_log: any, id: any) {
+    var last_chat
+    for (var chat_log of chat_log) {
+      last_chat = chat_log.chat_content   
+    }
+    if (localStorage.getItem(id) == null) {
+      localStorage.setItem(id, last_chat)
+    }
+    if (last_chat != localStorage.getItem(id)) {
+      localStorage.setItem(id + "Status", "HasChanged")
+      if (localStorage.getItem(id + "Clicked") === "Clicked") {
+        localStorage.setItem(id, last_chat)
+        localStorage.setItem(id + "Clicked", "NotClicked")
+      }
+    }
+    else if (last_chat == localStorage.getItem(id)){
+      localStorage.setItem(id + "Status", "HasNotChanged")
+    }
+    return last_chat
+  }
+
+  //Check if New Messsage
+
+  checkIfChanged(id: any) {
+    return localStorage.getItem(id + "Status")
+  }
+
+  //Load Data of Selected Chat
+
+  activeChat: any;
+  activeChatID: any;
+  activeChatContent: Chat_Log[] = [];
+  activeChatContentTemp: any = {};
+
+  onMessageClick(id: any, user: any, chat_log: any) {
+    this.activeChatID = id
+    this.activeChat = user
+    this.activeChatContent = chat_log
+
+    localStorage.setItem(id + "Clicked", "Clicked")
+  }
+
+  //Reload View when change occurs
+
+  reloadActiveMessage() {
+        for (let chat of this.chatsData) {
+      if (chat._id == this.activeChatID) {
+        this.activeChatContentTemp = chat.chat_log
+        this.activeChatContent = this.activeChatContentTemp        
+      }
+    }
+  }
+
+  //Chat CRUD
+
+  sendBoxContent : any
+  addChat: any = {}
+  onSend(activeChatContent: any) {   
+    this.addChat.chat_log = activeChatContent
+    this.addChat.chat_log.push({ chat_content: this.sendBoxContent, chat_date: new Date(), chat_user: this.username })
+    for (let chats of this.chatsData) {
+      if (chats._id == this.activeChatID) {
+        console.log(chats.chat_log)
+        this.dataService.updateItem('chats', this.activeChatID, chats)
+        .subscribe((data: any) => {
+        });
+      }
+    }
+    this.sendBoxContent = ""    
   }
 
 

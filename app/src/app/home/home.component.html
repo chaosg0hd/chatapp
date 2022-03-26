@@ -1,69 +1,154 @@
+
+<!--Topbar-->
 <mat-toolbar color="primary">
   <span style="flex: 1 1 auto;"></span>
   <h1>Hello! {{fname}}&nbsp;{{lname}}</h1>
   <span style="flex: 1 1 auto;"></span>
-
   <button mat-mini-fab color="primary" (click)="drawer.toggle()">
     <mat-icon>reorder</mat-icon>
   </button>
   <button mat-mini-fab color="warn" [routerLink]="['/login']">
     <mat-icon>logout</mat-icon>
   </button>
-
 </mat-toolbar>
 
-<mat-drawer-container style="height: 100%;" autosize>
-  <mat-drawer #drawer style="width: 20%; min-width: 70px; margin-left: 0px;" mode="side" opened="isOpened" position="end">
-    <div class="mat-elevation-z8" style="height: 300px; width: 100%; background-image: url('{{imgUrl}}'); background-size:cover; background-position:center">
 
+
+<mat-drawer-container style="height: 100%;" autosize>
+
+  <!--Drawer-->
+  <mat-drawer #drawer style="width: 20%; min-width: 400px; margin-left: 0px;" mode="side" opened="isOpened" position="end">
+    <div class="mat-elevation-z8" style="height: 300px; width: 100%; background-image: url('{{imgUrl}}'); background-size:cover; background-position:center">
     </div>
     <br />
-    
     <h3 style="text-align:center">User: {{username}}</h3>
-
     <mat-list>
-
       <br />
       <mat-divider></mat-divider>
       <br />
-
       <h3 style="text-align:center">Contacts</h3>
-
       <ng-container *ngFor="let contact of contact_list">
         <mat-list-item>
-          <button mat-mini-fab color="primary" class="mat-elevation-z8" [routerLink]="['/bundy']" style="background-image: url('{{imgUrl}}'); background-size:cover">
+          <button mat-mini-fab color="primary" class="mat-elevation-z8" style="background-image: url('{{imgUrl}}'); background-size:cover">
           </button>
           <h4 style="text-align: center">
             &nbsp;&nbsp;{{contact.contact_name}}
           </h4>
         </mat-list-item>
       </ng-container>
-
       <br />
       <mat-divider></mat-divider>
       <br />
-
-      <h3 style="text-align:center">Messages</h3>
-
-      <mat-list-item>
-        <button mat-mini-fab color="primary" class="mat-elevation-z8">
-          <mat-icon>hail</mat-icon>
-        </button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <mat-card style="width: 90%; background-color: #3f51b5; color: white">
-
-          <mat-card-content>
-            <p>Sample Content</p>
-          </mat-card-content>
-        </mat-card>
-      </mat-list-item>
-
+      <h3 style="text-align:center">Conversations</h3>
       <br />
       <br />
-
-
-
+      <ng-container *ngFor="let chat of chatsData">
+        <mat-list-item>
+          &nbsp;&nbsp;
+          <mat-card class="mat-elevation-z8" style="width: 70%; background-color: #3f51b5; color: white" (click)="onMessageClick(chat._id, chat.users, chat.chat_log)">
+            <ng-container *ngIf="checkIfChanged(chat._id) === 'HasChanged'">
+              <p matBadge="!" matBadgeSize="medium" matBadgeColor="warn" style="text-align: left; width: 100%"> </p>
+            </ng-container>
+            <mat-card-content>
+              <p style="text-align: left">
+                <button mat-mini-fab color="primary" class="mat-elevation-z8" style="background-image: url('{{imgUrl}}'); background-size:cover">
+                </button>
+                Me,
+                <ng-container *ngFor="let users of chat.users">
+                  <ng-container *ngIf="users != username">
+                    <button mat-mini-fab color="primary" class="mat-elevation-z8" style="background-image: url('{{imgUrl}}'); background-size:cover">
+                    </button>
+                    {{users}},
+                  </ng-container>
+                </ng-container>
+              </p>
+            </mat-card-content>
+            <mat-card-footer style="text-align: right">
+              {{getChatsContentsLast(chat.chat_log, chat._id)}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              <br />
+              <br />
+            </mat-card-footer>
+          </mat-card>
+          <div style="width: 0; height: 0; border-top: 15px solid transparent; border-left: 30px solid #3f51b5; border-bottom: 15px solid transparent; "></div>
+        </mat-list-item>
+        <br />
+        <br />
+        <br />
+        <br />
+      </ng-container>
+      <br />
+      <br />
     </mat-list>
-
   </mat-drawer>
+
+  <!--Body-->
+
+  <div style="width: 100%; height: 100%;">
+    <ng-container *ngIf="activeChat == null ">
+      <br />
+      <mat-card style="background-color: #3f51b5; width: 90%; margin: auto;">
+        <mat-card-title>
+          <p style="color: white">
+            Open a Conversation!
+          </p>
+        </mat-card-title>
+      </mat-card>
+      <p></p>
+    </ng-container>
+    <ng-container *ngIf="activeChat != null ">
+      <mat-card class="mat-elevation-z8">
+        <mat-card-title>
+          <ng-container *ngFor="let chat_users of activeChat">
+            <button mat-mini-fab color="primary" class="mat-elevation-z8" style="background-image: url('{{imgUrl}}'); background-size:cover">
+            </button>
+            {{chat_users}},
+          </ng-container>
+        </mat-card-title>
+        <mat-card-content>
+          <ng-container *ngFor="let chatcontents of activeChatContent">
+            <ng-container *ngIf="chatcontents.chat_user != username">
+              <div style="margin-left: 20px;width: 0; height: 0; border-right: 15px solid transparent; border-bottom: 30px solid #3f51b5; border-left: 15px solid transparent; "></div>
+            </ng-container>
+            <mat-card style="background-color: #3f51b5" class="mat-elevation-z8">
+              <h3 style="color: white;">
+                <button mat-mini-fab color="primary" class="mat-elevation-z8" style="background-image: url('{{imgUrl}}'); background-size:cover">
+                </button>
+                <ng-container *ngIf="chatcontents.chat_user == username">
+                  Me :
+                </ng-container>
+                <ng-container *ngIf="chatcontents.chat_user != username">
+                  {{chatcontents.chat_user}} :
+                </ng-container>
+                {{chatcontents.chat_content}}
+              </h3>
+              <p style="color: white">
+                Sent :   {{chatcontents.chat_date | date:'dd, hh:mm:aa'}}
+              </p>
+            </mat-card>
+            <ng-container *ngIf="chatcontents.chat_user == username">
+              <div style="margin-right: 20px; margin-left: auto; width: 0; height: 0; border-right: 15px solid transparent; border-top: 30px solid #3f51b5; border-left: 15px solid transparent; "></div>
+            </ng-container>
+            <br />
+          </ng-container>
+        </mat-card-content>
+        <mat-card-footer>
+          <p style="text-align: center">
+            <mat-form-field appearance="outline" style="width:95%">
+              <mat-label style="font-size: 12px;">
+                <mat-icon style="font-size: 24px; vertical-align: middle;">edit</mat-icon> &nbsp; &nbsp;Say something . . .
+              </mat-label>
+              <input type="text" style="color:black" [(ngModel)]="sendBoxContent" matInput placeholder="">
+            </mat-form-field>
+          </p>
+          <button mat-raised-button color="primary" class="mat-elevation-z8" style="margin-left: 24px;" (click)="onSend(activeChatContent)">
+            Send
+          </button>
+          <br />
+          <br />
+        </mat-card-footer>
+      </mat-card>
+    </ng-container>
+  </div>
 </mat-drawer-container>
+
+

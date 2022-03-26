@@ -10,7 +10,7 @@ const password = "Aa1234567";
 const database = "chatapp";
 
 
-//Funny thing happened here took me hours to realize i was connecting to the wrong data base
+//Funny thing happened here took me hours to realize i was connecting to the wrong database
 const uri = "mongodb+srv://" + user + ":" + password + "@resourcecluster.7j9mt.mongodb.net/" + database + "?retryWrites=true&w=majority";
 
 
@@ -67,48 +67,9 @@ app.get('/api/check/', (req, res, next) => {
   next();
 });
 
-////Routers
-//const drawsRouter = require('./routes/draws');
-//const employeesRouter = require('./routes/employees');
-//const expensesRouter = require('./routes/expenses');
-//const inventoriesRouter = require('./routes/inventories');
-//const pettycashRouter = require('./routes/pettycash');
-//const purchasesRouter = require('./routes/purchases');
-//const revenuesRouter = require('./routes/revenues');
-//const salarytotalsRouter = require('./routes/salarytotals');
-//const saldeltasRouter = require('./routes/saldeltas');
-//const salesRouter = require('./routes/sales');
-//const stocksRouter = require('./routes/stocks');
-//const galleryRouter = require('./routes/gallery');
-
-
 const usersRouter = require('./routes/users');
 const chatsRouter = require('./routes/chats');
 
-
-//const announcementRouter = require('./routes/announcements');
-//const taskBoardRouter = require('./routes/taskboard');
-//const payrollRouter = require('./routes/payroll');
-//const attendanceRouter = require('./routes/attendance');
-
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-//app.use("/api/draws", drawsRouter);
-//app.use("/api/employees", employeesRouter);
-//app.use("/api/expenses", expensesRouter);
-//app.use("/api/inventories", inventoriesRouter);
-//app.use("/api/pettycash", pettycashRouter);
-//app.use("/api/purchases", purchasesRouter);
-//app.use("/api/revenues", revenuesRouter);
-//app.use("/api/salarytotals", salarytotalsRouter);
-//app.use("/api/saldeltas", saldeltasRouter);
-//app.use("/api/sales", salesRouter);
-//app.use("/api/stocks", stocksRouter);
-//app.use("/api/gallery", galleryRouter);
-//app.use("/api/announcements", announcementRouter);
-//app.use("/api/taskboard", taskBoardRouter);
-//app.use("/api/payroll", payrollRouter);
-//app.use("/api/attendance", attendanceRouter);
 
 app.use("/api/users", usersRouter);
 app.use("/api/chats", chatsRouter);

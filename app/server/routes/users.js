@@ -83,21 +83,21 @@ router.post('/try', (req, res) => {
 });
 
 router.get('/:_id', (req, res) => {
-  Users.find({})
-    .then(users => res.send(users))
-    .catch(error => console.log(error));
+    Chats.find({})
+        .then(chats => res.send(chats))
+        .catch(error => console.log(error));
 });
 
 router.put('/:_id', (req, res) => {
-  Users.findOneAndUpdate({ "_id": req.params }, { $set: req.body.data })
-    .then(users => res.send(users))
-    .catch(error => console.log(error));
+    Chats.findOneAndUpdate({"_id": req.params}, {$set: req.body.data})
+        .then(chats => res.send(chats))
+        .catch(error => console.log(error));
 });
 
 router.patch('/:_id', (req, res) => {
-  Users.findOneAndUpdate({ "_id": req.params }, { $set: req.body.data })
-    .then(users => res.send(users))
-    .catch(error => console.log(error));
+    Chats.findOneAndUpdate({"_id": req.params}, {$set: req.body.data})
+        .then(chats => res.send(chats))
+        .catch(error => console.log(error));
 });
 
 router.get('/', (req, res) => {
