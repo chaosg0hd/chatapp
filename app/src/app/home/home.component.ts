@@ -161,7 +161,6 @@ export class HomeComponent implements OnInit {
     this.addChat.chat_log.push({ chat_content: this.sendBoxContent, chat_date: new Date(), chat_user: this.username })
     for (let chats of this.chatsData) {
       if (chats._id == this.activeChatID) {
-        console.log(chats.chat_log)
         this.dataService.updateItem('chats', this.activeChatID, chats)
         .subscribe((data: any) => {
         });
