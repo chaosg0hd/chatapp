@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
     this.isMobile = this.libraryService.getIsMobile();
   }
 
+  //Login CRUD
 
   username: any
   password: any
@@ -62,13 +63,12 @@ export class LoginComponent implements OnInit {
 
     console.log(this.loginData);
 
-    //createitem atm is POST and not Full Auth
+    //createitem is a bad name , atm is POST and not Full Auth
     this.dataService.createItem('users/login', this.loginData).subscribe((data: any) => {
 
-      console.log(data);
-      /*localStorage.clear;*/
+      localStorage.clear;
 
-      localStorage.setItem('id', data.user._id);
+      localStorage.setItem('userid', data.user._id);
       localStorage.setItem('username', data.user.username);
       localStorage.setItem('imgUrl', data.user.imgUrl);
       localStorage.setItem('lname', data.user.lname);
@@ -76,9 +76,6 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('mname', data.user.mname);
       localStorage.setItem('imgUrl', data.user.imgUrl);
       localStorage.setItem('contact_list', JSON.stringify( data.user.contact_list));
-
-      console.log(localStorage.getItem('username'))
-      console.log(localStorage.getItem('fname'))
 
       var username = localStorage.getItem('username');
 

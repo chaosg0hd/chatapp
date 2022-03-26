@@ -7,12 +7,10 @@
   <button mat-mini-fab color="primary" (click)="drawer.toggle()">
     <mat-icon>reorder</mat-icon>
   </button>
-  <button mat-mini-fab color="warn" [routerLink]="['/login']">
+  <button mat-mini-fab color="warn" (click)="logOut()">
     <mat-icon>logout</mat-icon>
   </button>
 </mat-toolbar>
-
-
 
 <mat-drawer-container style="height: 100%;" autosize>
 
@@ -22,6 +20,9 @@
     </div>
     <br />
     <h3 style="text-align:center">User: {{username}}</h3>
+
+    <p style="text-align: center">{{fname}} {{lname}}</p>
+
     <mat-list>
       <br />
       <mat-divider></mat-divider>
@@ -86,7 +87,7 @@
   <div style="width: 100%; height: 100%;">
     <ng-container *ngIf="activeChat == null ">
       <br />
-      <mat-card style="background-color: #3f51b5; width: 90%; margin: auto;">
+      <mat-card style="background-color: #3f51b5; width: 80%; margin: auto;">
         <mat-card-title>
           <p style="color: white">
             Open a Conversation!

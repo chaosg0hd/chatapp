@@ -33,7 +33,7 @@ app.use((req, res, next) => {
   next();
 });
 
-//CHECK CONN
+//CHECK CONN Disabled because too heavy on requests
 
 //app.use('/api/check/', (req, res, next) => {
 //    const content = [
@@ -62,14 +62,11 @@ app.get('/api/check/', (req, res, next) => {
     message: "Connected Succesfully",
     status: 200,
   })
-
-  /*console.log("Request Received");*/
   next();
 });
 
 const usersRouter = require('./routes/users');
 const chatsRouter = require('./routes/chats');
-
 
 app.use("/api/users", usersRouter);
 app.use("/api/chats", chatsRouter);

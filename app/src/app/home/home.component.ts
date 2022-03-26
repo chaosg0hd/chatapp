@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
   fname = localStorage.getItem("fname")
   lname = localStorage.getItem("lname")
   imgUrl = localStorage.getItem("imgUrl")
-  id = localStorage.getItem("id")
+  id = localStorage.getItem("userid")
   contact_list: any[] = JSON.parse(localStorage.getItem('contact_list') || '{}')
 
   chatsPayload: Chats[] = [];
@@ -168,6 +168,16 @@ export class HomeComponent implements OnInit {
       }
     }
     this.sendBoxContent = ""    
+  }
+
+  //Log Out
+
+  logOut() {
+
+    localStorage.clear
+    localStorage.removeItem("userid")
+    this.router.navigate(['login'])
+
   }
 
 

@@ -25,8 +25,6 @@ router.get('/:user', (req, res) => {
     .catch(error => console.log(error));
 });
 
-
-
 router.put('/:_id', (req, res) => {
     Chats.findOneAndUpdate({"_id": req.params}, {$set: req.body.data})
         .then(chats => res.send(chats))
